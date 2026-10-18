@@ -89,7 +89,7 @@ The plugin adds nothing to your pages until you save a valid project key. After 
 
 The plugin itself does not collect data, does not send data from your WordPress server, and does not contact Sequential from your WordPress admin.
 
-To learn how Sequential handles recorded data, read [Sequential privacy features](https://www.usesequential.com/privacy-features). Sequential has not published a privacy policy page or terms of service page yet. Contact hello@usesequential.com with questions.
+To learn how Sequential handles recorded data, read the [Sequential Privacy Policy](https://www.usesequential.com/privacy), the [Sequential Terms of Service](https://www.usesequential.com/terms) and [Sequential privacy features](https://www.usesequential.com/privacy-features). Contact hello@usesequential.com with questions.
 
 Tell your visitors about Sequential in your site's privacy policy.
 
