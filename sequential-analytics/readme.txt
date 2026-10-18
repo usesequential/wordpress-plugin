@@ -84,7 +84,8 @@ This plugin connects your site to Sequential, an external service run by Sequent
 The plugin adds nothing to your pages until you save a valid project key. After that, every front-end page that it adds the tag to does these things in the visitor's browser:
 
 * It loads the Sequential SDK file from `https://cdn.usesequential.com/sdk/sequential/v1/sequential.js`. The visitor's browser sends the usual request data, such as the IP address and the user agent, to that host.
-* The SDK records the visitor's session for session replay and product analytics. It sends that data, with your project key and the release (if you set one), to the ingest host that you configure. The default ingest host is `https://api.usesequential.com`.
+* The SDK asks the ingest host for your project's settings. Then it sends analytics events, such as page views and clicks, with your project key and the release (if you set one), to that host. You set the ingest host in the plugin; the default is `https://api.usesequential.com`.
+* Only when session replay is on for your project in Sequential: the SDK loads the session replay recorder from the ingest host (`<ingest host>/rec/recorder.js/...`), the recorder loads the rrweb recording library from `https://cdn.usesequential.com/sdk/rrweb/...`, and the recorder sends the recorded session to the ingest host. When session replay is off, nothing is recorded for replay.
 
 The plugin itself does not collect data, does not send data from your WordPress server, and does not contact Sequential from your WordPress admin.
 

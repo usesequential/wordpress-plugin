@@ -39,9 +39,15 @@ final class Sequential_Analytics_Options {
 	const KEY_PATTERN = '/^sq_sequential_[A-Za-z0-9_-]{1,128}$/D';
 
 	/**
-	 * Longest release string the settings page accepts.
+	 * Longest release string the settings page accepts. The SDK accepts 1 to 64 printable ASCII characters
+	 * (sequential.js reads data-release with /^[\x20-\x7E]{1,64}$/) and sends events without a release otherwise.
 	 */
-	const RELEASE_MAX_LENGTH = 100;
+	const RELEASE_MAX_LENGTH = 64;
+
+	/**
+	 * A release the SDK accepts: 1 to 64 printable ASCII characters.
+	 */
+	const RELEASE_PATTERN = '/^[\x20-\x7E]{1,64}$/D';
 
 	/**
 	 * Default values for every setting.
@@ -134,19 +140,12 @@ final class Sequential_Analytics_Options {
 	}
 
 	/**
-	 * Cleans a release string: plain text, one line, at most RELEASE_MAX_LENGTH characters.
+	 * Whether a release is one that the SDK accepts. The tag escapes it when it prints it.
 	 *
-	 * @param mixed $release Value to clean.
-	 * @return string
+	 * @param mixed $release Value to check (already trimmed).
+	 * @return bool
 	 */
-	public static function sanitize_release( $release ) {
-		if ( ! is_string( $release ) ) {
-			return '';
-		}
-		$release = sanitize_text_field( $release );
-
-		return function_exists( 'mb_substr' )
-			? mb_substr( $release, 0, self::RELEASE_MAX_LENGTH )
-			: substr( $release, 0, self::RELEASE_MAX_LENGTH );
+	public static function is_valid_release( $release ) {
+		return is_string( $release ) && 1 === preg_match( self::RELEASE_PATTERN, $release );
 	}
 }

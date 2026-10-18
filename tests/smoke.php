@@ -135,6 +135,19 @@ list( , $page ) = seq_after_save( $res4, $admin );
 seq_check( false !== strpos( $page, 'Settings saved' ) && false === strpos( $page, 'notice-error' ) && false !== strpos( $page, 'is on your site' ), 'valid save: "Settings saved", no error, status on' );
 echo 'saved release: ' . var_export( $opt['release'], true ) . "\n";
 
+// 4b. A release that the SDK would refuse is not saved: the saved release stays, and the page says why.
+$prev_release = $opt['release'];
+$res4b = seq_save( $admin, array( 'key' => $key, 'api' => 'https://api.usesequential.com', 'release' => "v2 \u{2713}", 'skip_admins' => '1' ), $nonce );
+seq_check( $prev_release === seq_opt()['release'], 'non-ASCII release not saved; the saved release stays' );
+list( , $page ) = seq_after_save( $res4b, $admin );
+seq_check( 1 === substr_count( $page, 'The release was not saved' ), 'release error shown once' );
+$res4c = seq_save( $admin, array( 'key' => $key, 'api' => 'https://api.usesequential.com', 'release' => str_repeat( 'a', 65 ), 'skip_admins' => '1' ), $nonce );
+seq_check( $prev_release === seq_opt()['release'], '65-character release not saved' );
+$res4d = seq_save( $admin, array( 'key' => $key, 'api' => 'https://api.usesequential.com', 'release' => str_repeat( 'a', 64 ), 'skip_admins' => '1' ), $nonce );
+seq_check( str_repeat( 'a', 64 ) === seq_opt()['release'], '64-character release saved' );
+seq_save( $admin, array( 'key' => $key, 'api' => 'https://api.usesequential.com', 'release' => $prev_release, 'skip_admins' => '1' ), $nonce );
+seq_check( $prev_release === seq_opt()['release'], 'release restored for the next checks' );
+
 // 5. Visitor gets the exact snippet.
 list( , $html ) = seq_get( '/' );
 $head = seq_head( $html );

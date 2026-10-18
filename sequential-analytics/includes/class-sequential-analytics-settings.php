@@ -207,9 +207,17 @@ final class Sequential_Analytics_Settings {
 			}
 		}
 
-		$output['release'] = isset( $input['release'] )
-			? Sequential_Analytics_Options::sanitize_release( $input['release'] )
-			: '';
+		$release = isset( $input['release'] ) && is_string( $input['release'] ) ? trim( $input['release'] ) : '';
+		if ( '' === $release ) {
+			$output['release'] = '';
+		} elseif ( Sequential_Analytics_Options::is_valid_release( $release ) ) {
+			$output['release'] = $release;
+		} else {
+			self::report(
+				'sequential_analytics_release_invalid',
+				__( 'The release was not saved. A release is 1 to 64 characters: English letters, digits, spaces and the punctuation on a US keyboard.', 'sequential-analytics' )
+			);
+		}
 
 		$output['skip_admins'] = ! empty( $input['skip_admins'] );
 
@@ -332,7 +340,7 @@ final class Sequential_Analytics_Settings {
 		);
 		printf(
 			'<p class="description" id="sequential_analytics_release_help">%s</p>',
-			esc_html__( 'Optional. Your site\'s version, for example 2.4.1. The tag puts it on every event. Leave it empty if you do not need it.', 'sequential-analytics' )
+			esc_html__( 'Optional. Your site\'s version, for example 2.4.1: 1 to 64 characters, English letters, digits, spaces and US keyboard punctuation. The tag puts it on every event. Leave it empty if you do not need it.', 'sequential-analytics' )
 		);
 	}
 
