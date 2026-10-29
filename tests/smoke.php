@@ -125,7 +125,7 @@ list( , $page ) = seq_after_save( $res, $admin );
 seq_check( 1 === substr_count( $page, 'Enter a project key' ), 'empty key: required message shown once (seen ' . substr_count( $page, 'Enter a project key' ) . ')' );
 
 // 4. Valid save, with a hostile release value.
-$key = 'sq_sequential_AbC123xyz0AbC123xyz0Ab';
+$key = 'sq_sequential_EXAMPLE_NOT_A_KEY';
 $res4 = seq_save( $admin, array( 'key' => $key, 'api' => 'https://API.usesequential.com/', 'release' => '2.4.1"><script>alert(1)</script>', 'skip_admins' => '1' ), $nonce );
 $opt = seq_opt();
 seq_check( $key === $opt['key'], 'valid key saved' );
